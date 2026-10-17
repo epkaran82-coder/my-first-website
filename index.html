@@ -229,6 +229,17 @@
         return "You can ask about hospital services, OPD, specialist clinics, emergency care or contact information.";
       }
 
+if (
+  q.includes("phone") ||
+  q.includes("telephone") ||
+  q.includes("contact") ||
+  q.includes("email") ||
+  q.includes("address") ||
+  q.includes("location")
+) {
+  return "District General Hospital Mannar, Thalvupadu - Mannar Road, Mannar, Sri Lanka. Telephone: 023 222 2261. Email: dghmannar25@gmail.com. Official website: https://www.dghmannar.site/";
+}
+
       if (q.includes("service") || q.includes("what do you provide")) {
         return "The website lists OPD, inpatient services, specialist clinics and emergency care. Please contact the hospital to confirm current service availability.";
       }
