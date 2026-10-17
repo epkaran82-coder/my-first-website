@@ -248,9 +248,15 @@ if (
         return "The Outpatient Department is listed as a hospital service. Please contact the hospital to confirm current OPD hours and arrangements.";
       }
 
-      if (q.includes("clinic") || q.includes("specialist")) {
-        return "The website lists specialist clinics. Please contact the hospital to confirm clinic schedules and appointment arrangements.";
-      }
+     
+if (q.includes("neurosurgery") || q.includes("neurosurgeon")) {
+  return "The hospital website announces a neurosurgery clinic on Fridays each month. Please call 023 222 2261 to confirm the current date, time and appointment arrangements.";
+}
+
+if (q.includes("clinic") || q.includes("specialist")) {
+  return "District General Hospital Mannar provides specialist clinic services. For the current clinic timetable and appointment arrangements, please call 023 222 2261 or visit https://www.dghmannar.site/.";
+}
+
 
       if (q.includes("emergency") || q.includes("urgent")) {
         return "For a life-threatening emergency, seek emergency medical care immediately.";
