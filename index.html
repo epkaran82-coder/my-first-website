@@ -201,31 +201,44 @@
       return item;
     }
 
-    form.addEventListener("submit", async function(event) {
-      event.preventDefault();
-      const q = question.value.trim();
-      if (!q) return;
+   
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
 
-      addMessage(q, "user");
-      question.value = "";
-      question.disabled = true;
-      sendButton.disabled = true;
-      status.textContent = "Waiting for the AI response...";
+  const q = question.value.trim().toLowerCase();
+  if (!q) return;
 
-      const thinking = addMessage("Thinking...", "assistant");
+  addMessage(question.value.trim(), "user");
+  question.value = "";
 
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: q })
-        });
+  let answer;
 
-        const data = await response.json();
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening)[!. ]*$/.test(q)) {
+    answer = "Hello! Welcome to District General Hospital Mannar. How can I help you?";
+  } else if (q.includes("service") || q.includes("what do you provide")) {
+    answer = "The website lists these services: Outpatient Department (OPD), inpatient services, specialist clinics and emergency care. Please contact the hospital to confirm specific service availability.";
+  } else if (q.includes("opd") || q.includes("outpatient")) {
+    answer = "The Outpatient Department provides assessment for patients who do not require admission. Please contact the hospital to confirm current OPD hours and arrangements.";
+  } else if (q.includes("clinic") || q.includes("specialist")) {
+    answer = "The website lists specialist clinics. For clinic schedules, appointment arrangements and availability, please contact the hospital directly.";
+  } else if (q.includes("emergency") || q.includes("urgent")) {
+    answer = "The website lists emergency care as a hospital service. For a life-threatening emergency, seek emergency medical care immediately.";
+  } else if (q.includes("doctor") || q.includes("doctors") || q.includes("available")) {
+    answer = "I don't have live information about doctor numbers or availability. Please contact the hospital directly for the latest information.";
+  } else if (q.includes("contact") || q.includes("phone") || q.includes("telephone") || q.includes("address") || q.includes("location")) {
+    answer = "The hospital is District General Hospital Mannar, Sri Lanka. This website does not yet contain a verified telephone number. Please use an official hospital contact source.";
+  } else if (q.includes("thank")) {
+    answer = "You're welcome! Thank you for visiting the District General Hospital Mannar website.";
+  } else if (q.includes("help")) {
+    answer = "You can ask about hospital services, OPD, specialist clinics, emergency care or contact information.";
+  } else {
+    answer = "Sorry, I don't have a prepared answer for that question yet. Please try asking about hospital services, OPD, specialist clinics, emergency care or contact information.";
+  }
 
-        if (!response.ok) {
-          throw new Error(data.error || "Request failed.");
-        }
+  addMessage(answer, "assistant");
+  status.textContent = "Answer provided from the prepared information.";
+});
+
 
         thinking.textContent = data.answer;
         status.textContent = "Response received.";
