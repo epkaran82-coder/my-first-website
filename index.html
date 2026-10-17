@@ -1,259 +1,85 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>District General Hospital Mannar</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f5f9;
-      color: #243447;
-    }
-    header {
-      background: #123b63;
-      color: white;
-      text-align: center;
-      padding: 35px 15px;
-    }
-    nav {
-      background: #05616b;
-      padding: 14px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 12px;
-      font-weight: bold;
-    }
-    main {
-      max-width: 850px;
-      margin: 30px auto;
-      padding: 0 18px;
-    }
-    .card {
-      background: white;
-      padding: 25px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px #00000012;
-    }
-    h2 { color: #087e8b; }
-    .button, #sendButton {
-      background: #087e8b;
-      color: white;
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 7px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .button:hover, #sendButton:hover { background: #05616b; }
-    #chatMessages {
-      min-height: 100px;
-      max-height: 350px;
-      overflow-y: auto;
-      padding: 12px;
-      background: #f7fafc;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
-    .chat-message {
-      padding: 10px 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-    .user-message {
-      background: #d9edf7;
-      margin-left: 12%;
-    }
-    .assistant-message {
-      background: #e3f3e8;
-      margin-right: 12%;
-    }
-    #chatForm {
-      display: flex;
-      gap: 8px;
-    }
-    #question {
-      flex: 1;
-      min-width: 0;
-      padding: 12px;
-      border: 1px solid #b7c5d1;
-      border-radius: 7px;
-      font-size: 16px;
-    }
-    #chatStatus {
-      color: #526575;
-      font-size: 14px;
-    }
-    footer {
-      background: #183b46;
-      color: white;
-      text-align: center;
-      padding: 18px;
-    }
-    @media (max-width: 600px) {
-      header h1 { font-size: 25px; }
-      nav a { display: inline-block; margin: 6px; }
-      main { margin-top: 18px; }
-      .card { padding: 18px; }
-      #chatForm { flex-direction: column; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Welcome to District General Hospital Mannar</h1>
-    <p>Quality Healthcare for Everyone</p>
-  </header>
+function showMessage() {
+  document.getElementById("message").textContent =
+    "Thank you for visiting our hospital website!";
+}
 
-  <nav>
-    <a href="#about">About Us</a>
-    <a href="#services">Services</a>
-    <a href="#contact">Contact</a>
-    <a href="#hospitalChat">Ask Our AI Assistant</a>
-  </nav>
+const form = document.getElementById("chatForm");
+const question = document.getElementById("question");
+const messages = document.getElementById("chatMessages");
+const sendButton = document.getElementById("sendButton");
+const status = document.getElementById("chatStatus");
 
-  <main>
-    <section class="card" id="about">
-      <h2>Welcome to Our Hospital</h2>
-      <p>We are committed to providing safe, accessible
-      and quality healthcare to our community.</p>
-    </section>
+function addMessage(text, sender) {
+  const item = document.createElement("div");
+  item.className = "chat-message " +
+    (sender === "user" ? "user-message" : "assistant-message");
+  item.textContent = text;
+  messages.appendChild(item);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-    <section class="card" id="services">
-      <h2>Our Services</h2>
-      <ul>
-        <li>Outpatient Department (OPD)</li>
-        <li>Inpatient Services</li>
-        <li>Specialist Clinics</li>
-        <li>Emergency Care</li>
-      </ul>
-    </section>
+function getPreparedAnswer(questionText) {
+  const q = questionText.toLowerCase().trim();
 
-    <section class="card" id="contact">
-      <h2>Contact Information</h2>
-      <p>District General Hospital Mannar, Sri Lanka</p>
-      <button class="button" onclick="showMessage()">Learn More</button>
-      <p id="message"></p>
-    </section>
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening)[!. ]*$/.test(q)) {
+    return "Hello! Welcome to District General Hospital Mannar. How can I help you?";
+  }
 
-    <section class="card" id="hospitalChat">
-      <h2>Ask Our AI Assistant</h2>
-      <p>Ask general questions about hospital services.
-      Do not enter patient names, medical record numbers,
-      or other confidential health information.</p>
+  if (q.includes("thank")) {
+    return "You're welcome! Thank you for visiting our hospital website.";
+  }
 
-      <div id="chatMessages" aria-live="polite">
-        <div class="chat-message assistant-message">
-          Hello! I am an AI assistant. How can I help you?
-        </div>
-      </div>
+  if (q.includes("help")) {
+    return "You can ask about hospital services, OPD, specialist clinics, emergency care or contact information.";
+  }
 
-      <form id="chatForm">
-        <input
-          id="question"
-          name="question"
-          type="text"
-          maxlength="2000"
-          placeholder="Type your question..."
-          autocomplete="off"
-          required
-        >
-        <button id="sendButton" type="submit">Send</button>
-      </form>
-      <p id="chatStatus" role="status"></p>
-      <p><small>This AI may make mistakes. It does not provide
-      diagnoses or replace advice from a qualified clinician.</small></p>
-    </section>
-  </main>
+  if (q.includes("service") || q.includes("what do you provide")) {
+    return "Our website lists OPD, inpatient services, specialist clinics and emergency care. Please contact the hospital to confirm specific services and availability.";
+  }
 
-  <footer>
-    <p>District General Hospital Mannar</p>
-    <p>Committed to Better Healthcare</p>
-  </footer>
+  if (q.includes("opd") || q.includes("outpatient")) {
+    return "The Outpatient Department provides assessment for patients who do not require admission. Please contact the hospital to confirm current OPD hours.";
+  }
 
-  <script>
-    function showMessage() {
-      document.getElementById("message").textContent =
-        "Thank you for visiting our hospital website!";
-    }
+  if (q.includes("clinic") || q.includes("specialist")) {
+    return "Our website lists specialist clinics. Please contact the hospital to confirm clinic schedules and appointment arrangements.";
+  }
 
-    const form = document.getElementById("chatForm");
-    const question = document.getElementById("question");
-    const messages = document.getElementById("chatMessages");
-    const sendButton = document.getElementById("sendButton");
-    const status = document.getElementById("chatStatus");
+  if (q.includes("emergency") || q.includes("urgent")) {
+    return "For a life-threatening emergency, seek emergency medical care immediately. Please contact local emergency services or attend the nearest appropriate emergency department.";
+  }
 
-    function addMessage(text, sender) {
-      const item = document.createElement("div");
-      item.className = "chat-message " +
-        (sender === "user" ? "user-message" : "assistant-message");
-      item.textContent = text;
-      messages.appendChild(item);
-      messages.scrollTop = messages.scrollHeight;
-      return item;
-    }
+  if (q.includes("doctor") || q.includes("staff") || q.includes("available")) {
+    return "I don't have live information about doctor numbers or availability. Please contact the hospital directly for the latest information.";
+  }
 
-   
+  if (q.includes("contact") || q.includes("phone") || q.includes("telephone") || q.includes("address") || q.includes("location")) {
+    return "District General Hospital Mannar is located in Mannar, Sri Lanka. Please consult an official hospital source for verified contact details.";
+  }
+
+  return "Sorry, I don't have a prepared answer for that question yet. Please try asking about hospital services, OPD, specialist clinics, emergency care or contact information.";
+}
+
 form.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  const q = question.value.trim().toLowerCase();
-  if (!q) return;
+  const originalQuestion = question.value.trim();
+  if (!originalQuestion) return;
 
-  addMessage(question.value.trim(), "user");
+  addMessage(originalQuestion, "user");
   question.value = "";
 
-  let answer;
+  sendButton.disabled = true;
+  question.disabled = true;
+  status.textContent = "Finding a prepared answer...";
 
-  if (/^(hi|hello|hey|good morning|good afternoon|good evening)[!. ]*$/.test(q)) {
-    answer = "Hello! Welcome to District General Hospital Mannar. How can I help you?";
-  } else if (q.includes("service") || q.includes("what do you provide")) {
-    answer = "The website lists these services: Outpatient Department (OPD), inpatient services, specialist clinics and emergency care. Please contact the hospital to confirm specific service availability.";
-  } else if (q.includes("opd") || q.includes("outpatient")) {
-    answer = "The Outpatient Department provides assessment for patients who do not require admission. Please contact the hospital to confirm current OPD hours and arrangements.";
-  } else if (q.includes("clinic") || q.includes("specialist")) {
-    answer = "The website lists specialist clinics. For clinic schedules, appointment arrangements and availability, please contact the hospital directly.";
-  } else if (q.includes("emergency") || q.includes("urgent")) {
-    answer = "The website lists emergency care as a hospital service. For a life-threatening emergency, seek emergency medical care immediately.";
-  } else if (q.includes("doctor") || q.includes("doctors") || q.includes("available")) {
-    answer = "I don't have live information about doctor numbers or availability. Please contact the hospital directly for the latest information.";
-  } else if (q.includes("contact") || q.includes("phone") || q.includes("telephone") || q.includes("address") || q.includes("location")) {
-    answer = "The hospital is District General Hospital Mannar, Sri Lanka. This website does not yet contain a verified telephone number. Please use an official hospital contact source.";
-  } else if (q.includes("thank")) {
-    answer = "You're welcome! Thank you for visiting the District General Hospital Mannar website.";
-  } else if (q.includes("help")) {
-    answer = "You can ask about hospital services, OPD, specialist clinics, emergency care or contact information.";
-  } else {
-    answer = "Sorry, I don't have a prepared answer for that question yet. Please try asking about hospital services, OPD, specialist clinics, emergency care or contact information.";
-  }
+  const answer = getPreparedAnswer(originalQuestion);
 
   addMessage(answer, "assistant");
-  status.textContent = "Answer provided from the prepared information.";
+  status.textContent = "Answer provided from prepared information.";
+
+  sendButton.disabled = false;
+  question.disabled = false;
+  question.focus();
 });
-
-
-        thinking.textContent = data.answer;
-        status.textContent = "Response received.";
-      } catch (error) {
-        thinking.textContent =
-          "Sorry, I could not get a response. Please try again.";
-        status.textContent =
-          "The AI service may be unavailable. Please try again later.";
-        console.error("Chat error:", error);
-      } finally {
-        question.disabled = false;
-        sendButton.disabled = false;
-        question.focus();
-      }
-    });
-  </script>
-</body>
-</html>
